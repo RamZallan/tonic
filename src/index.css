@@ -1,0 +1,70 @@
+body {
+    margin: 0;
+    padding: 20px 0;
+    font-family: sans-serif;
+}
+
+.main {
+    margin-top: 100px;
+}
+
+.badge#machine-label {
+    margin: 0 5px;
+}
+
+.rounded-circle {
+    margin-right: 5px;
+}
+
+.log-filters label,{
+    margin-right: 15px;
+}
+
+.log-filters .form-check-input {
+    margin-right: 0;
+}
+
+.log-filters h4 {
+    margin: 25px 0 10px 0;
+}
+
+.drink-item {
+    padding: .75rem 0.5rem;
+}
+
+.drink-item:not(.disabled):hover {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.collapse-filters {
+    margin: 15px 0;
+}
+
+[class^="col-"] {
+    margin-bottom: 20px;
+}
+
+a.disabled,
+button.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.pull-right {
+    float: right;
+}
+
+.input-group {
+    max-width: 300px;
+    margin-right: 0;
+}
+
+.input-group input.form-control {
+    height: auto;
+    font-size: 0.815rem;
+    
+}
+
+.input-group button {
+    font-size: 0.7rem;
+}

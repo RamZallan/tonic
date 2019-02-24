@@ -1,0 +1,8 @@
+{
+  "short_name": "CSH WebDrink",
+  "name": "Computer Science House WebDrink Client",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#B0197E",
+  "background_color": "#EEEEEE"
+}

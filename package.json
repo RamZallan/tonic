@@ -1,0 +1,28 @@
+{
+  "name": "tonic",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "connected-react-router": "^5.0.1",
+    "csh-material-bootstrap": "^4.0.0-beta.3",
+    "history": "^4.7.2",
+    "oidc-client": "^1.5.4",
+    "prop-types": "^15.6.2",
+    "react": "^16.5.2",
+    "react-c3js": "^0.1.20",
+    "react-dom": "^16.5.2",
+    "react-redux": "^5.0.7",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.5",
+    "reactstrap": "^6.4.0",
+    "redux": "^4.0.1",
+    "redux-oidc": "^3.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
