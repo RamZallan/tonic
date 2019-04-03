@@ -16,9 +16,9 @@ class SlotList extends Component {
     }
 
     renderSlotList() {
-        const Slots = this.props.slots.map((slot, index) => {
+        const Slots = Object.keys(this.props.slots).map((slot, index) => {
             return (
-                    <Slot slot={slot} background="#4eb0e3" isDrinkAdmin={this.props.isDrinkAdmin}/>
+                    <Slot slot={this.props.slots[slot]} isDrinkAdmin={this.props.isDrinkAdmin}/>
             )
         });
         this.setState({Slots});
