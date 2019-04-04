@@ -16,12 +16,13 @@ class MachineCard extends Component {
         }
     }
     render() {
+        const isSnack = this.props.name === 'snack';
         return (
-                <Col xs="12" lg="4">
+                <Col xs="12" lg={isSnack ? '12' : '6'}>
                     <Card>
                         <CardHeader>{this.getName(this.props.name)}</CardHeader>
                         <CardBody>
-                            <SlotList slots={this.props.slots} isDrinkAdmin={this.props.isDrinkAdmin}/>
+                            <SlotList slots={this.props.slots} isSnack={isSnack} isDrinkAdmin={this.props.isDrinkAdmin}/>
                         </CardBody>
                     </Card>
                 </Col>
