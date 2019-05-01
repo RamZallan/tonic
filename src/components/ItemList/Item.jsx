@@ -1,20 +1,34 @@
 import React from 'react';
 import {ButtonGroup, Button, Badge} from "reactstrap";
 
+
+function getMachineName(abbrev) {
+    switch(abbrev) {
+        case 'bigdrink':
+            return 'Big Drink';
+        case 'littledrink':
+            return 'Little Drink';
+        case 'snack':
+            return 'Snack';
+        default:
+            return 'Unknown Machine'
+    }
+}
+
 export default ({id, name, price, machines}) => {
     return (
                 <tr>
                     <td>
                         {name}
-                        {machines && machines.map(machine => {
+                        {machines && machines.map((machine, index) => {
                             switch(machine) {
-                                case "Big Drink":
-                                    return <Badge id="machine-label" color="info" pill>{machine}</Badge> 
-                                case "Snack":
-                                    return <Badge id="machine-label" color="warning" pill>{machine}</Badge>
+                                case "bigdrink":
+                                    return <Badge key={index} id="machine-label" color="info" pill>{getMachineName(machine)}</Badge>
+                                case "snack":
+                                    return <Badge key={index} id="machine-label" color="warning" pill>{getMachineName(machine)}</Badge>
                                 default:
-                                case "Little Drink":
-                                    return <Badge id="machine-label" color="success" pill>{machine}</Badge> 
+                                case "littledrink":
+                                    return <Badge key={index} id="machine-label" color="success" pill>{getMachineName(machine)}</Badge>
                             }
                         })}
                     </td>

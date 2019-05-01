@@ -1,157 +1,15 @@
 import React, {Component} from 'react';
-import Item from './Item';
+import { connect } from "react-redux";
 import {Form, FormGroup, Input, Table} from "reactstrap";
 
-// "join" drink + items data to see if an item is in a machine
-const DrinkData = [
-        {
-            id: "ld",
-            name: "Little Drink",
-            slots:
-                [
-                    {
-                        slot_id: 1,
-                        drink_id: 1,
-                        item: "Coke",
-                        price: 10,
-                    },
-                    {
-                        slot_id: 2,
-                        drink_id: 8,
-                        item: "Diet Coke",
-                        price: 10,
-                    },
-                    {
-                        slot_id: 3,
-                        drink_id: 7,
-                        item: "Drink's Choice",
-                        price: 5,
-                    },
-                    {
-                        slot_id: 1,
-                        drink_id: 9,
-                        item: "Fanta's Choice",
-                        price: 9,
-                        empty: true,
-                    }
-                ]
-        },
-        {
-            id: "bd",
-            name: "Big Drink",
-            slots:
-                [
-                    {
-                        slot_id: 1,
-                        drink_id: 4,
-                        item: "Bawls",
-                        price: 20,
-                    },
-                    {
-                        slot_id: 2,
-                        drink_id: 10,
-                        item: "Jolt",
-                        price: 30,
-                    },
-                    {
-                        slot_id: 3,
-                        drink_id: 100,
-                        item: "A Gun",
-                        price: 1,
-                    },
-                    {
-                        slot_id: 3,
-                        drink_id: 7,
-                        item: "Drink's Choice",
-                        price: 5,
-                    },
-                ]
-        },
-        {
-            id: "s",
-            name: "Snack",
-            slots:
-                [
-                    {
-                        slot_id: 1,
-                        drink_id: 5,
-                        item: "Soylent",
-                        price: 100,
-                    },
-                    {
-                        slot_id: 2,
-                        drink_id: 5,
-                        item: "Soylent",
-                        price: 100,
-                        empty: true,
-                    },
-                    {
-                        slot_id: 3,
-                        item_id: 101,
-                        item: "marcsiphone",
-                        price: 1000,
-                    },
-                ]
-        },
-];
+import Item from './Item';
+import { fetchItems } from '../../actions';
+import InfoSpinner from "../InfoSpinner";
 
-const ItemData = [
-        {
-           id: 1,
-           name: "Coke",
-           price: 10,
-        },
-        {
-           id: 2,
-           name: "Sprite",
-           price: 10
-        },
-        {
-           id: 3,
-           name: "Wegman's Cola",
-           price: 5
-        },
-        {
-           id: 4,
-           name: "Bawls",
-           price: 20
-        },
-        {
-           id: 5,
-           name: "Soylent",
-           price: 100
-        },
-        {
-           id: 6,
-           name: "Swiss Miss",
-           price: 15
-        },
-        {
-           id: 7,
-           name: "Drink's Choice",
-           price: 9
-        },
-        {
-           id: 8,
-           name: "Diet Coke",
-           price: 10,
-        },
-        {
-           id: 9,
-           name: "Fanta's Choice",
-           price: 9,
-        },
-        {
-           id: 10,
-           name: "Jolt",
-           price: 30,
-        },
-];
 
 class ItemList extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
 
         this.state = {
             filterStr: "",
@@ -159,18 +17,21 @@ class ItemList extends Component {
     }
 
     componentDidMount() {
-        this.renderItemsList();
+        if (this.props.oidc.user && !this.props.items) {
+            this.props.getItems(this.props.oidc.user.access_token);
+        }
     }
 
     renderItemsList() {
-        for (let machine of DrinkData) {
-            for (let slot of machine.slots) {
-                for(let item of ItemData) {
-                  if (item.id === slot.drink_id) {
-                        if (item['machines'] && !item['machines'].includes(machine.name)) {
-                            item['machines'].push(machine.name);
+        for (let machine of Object.keys(this.props.stock)) {
+            for (let slot of Object.keys(this.props.stock[machine])) {
+                for(let item of this.props.items) {
+                    let drink = this.props.stock[machine][slot];
+                    if (item.id === drink.id) {
+                        if (item['machines'] && !item['machines'].includes(machine)) {
+                            item['machines'].push(machine);
                         } else {
-                            item['machines'] = [machine.name];
+                            item['machines'] = [machine];
                         }
                   } 
                 };
@@ -179,7 +40,13 @@ class ItemList extends Component {
     }
 
     render() {
-        const items = ItemData
+        if (!this.props.items) {
+            return (<InfoSpinner>Loading items</InfoSpinner>);
+        } else if (!this.props.items.length) {
+            return (<h2>No items found</h2>);
+        }
+        this.renderItemsList();
+        const items = this.props.items
             .filter(item => (this.state.filterStr
                 ? item.name.toLowerCase().includes(this.state.filterStr.toLowerCase())
                 : true)
@@ -222,4 +89,18 @@ class ItemList extends Component {
     }
 }
 
-export default ItemList;
+const mapStateToProps = state => ({
+    oidc: state.oidc,
+    stock: state.apis.stock.machines,
+    items: state.apis.items.items,
+});
+
+const mapDispatchToProps = dispatch => ({
+    getItems: access_token => fetchItems(dispatch, access_token)
+});
+
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ItemList);

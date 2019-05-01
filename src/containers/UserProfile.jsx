@@ -5,7 +5,7 @@ const mapStateToProps = state => ({
   name: ((state.oidc.user || {}).profile || {}).name,
   username: ((state.oidc.user || {}).profile || {}).preferred_username,
   isDrinkAdmin: (((state.oidc.user || {}).profile || {}).groups || []).includes("webmaster"),
-  drink_balance: 500, // TODO FIX
+  drink_balance: (state.apis.credits.user || {}).drinkBalance
 });
 
 const mapDispatchToProps = dispatch => ({

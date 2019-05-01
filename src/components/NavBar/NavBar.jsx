@@ -86,6 +86,4 @@ class NavBar extends React.Component {
     }
 }
 
-NavBar.propTypes = {};
-
 export default NavBar;

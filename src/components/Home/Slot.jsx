@@ -36,7 +36,7 @@ class Slot extends Component {
                     />
                 </span>
             </ListGroupItem>
-        )
+        );
     }
 }
 

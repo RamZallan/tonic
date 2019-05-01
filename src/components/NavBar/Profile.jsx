@@ -33,7 +33,7 @@ class Profile extends React.Component {
                       width={32}
                       height={32}
                     />
-                    {name} ({drink_balance} credits)
+                    {name} {drink_balance ? '(' + drink_balance + ' credits)' : ''}
                     <span className="caret"/>
                 </DropdownToggle>
                 <DropdownMenu>
@@ -49,7 +49,5 @@ class Profile extends React.Component {
         );
     }
 }
-
-Profile.propTypes = {};
 
 export default Profile;

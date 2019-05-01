@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Container} from 'reactstrap';
 import {ConnectedRouter} from 'connected-react-router';
 import {Switch, Route} from 'react-router-dom';
+
 import {history} from '../store';
 import ProtectedRoute from '../containers/ProtectedRoute';
 import OidcCallback from '../containers/OidcCallback';
@@ -16,6 +17,15 @@ import {
 
 
 class App extends Component {
+    componentDidUpdate() {
+        if (this.props.oidc.user && !this.props.stock) {
+            this.props.getStock(this.props.oidc.user.access_token);
+        }
+        if (this.props.oidc.user && !this.props.credits) {
+            this.props.getCredits(this.props.oidc.user.access_token, this.props.oidc.user.profile.preferred_username);
+        }
+    }
+
     render() {
         return (
             <ConnectedRouter history={history}>

@@ -1,164 +1,11 @@
+import { connect } from "react-redux";
 import React, {Component} from 'react';
-import User from './User';
 import {Form, FormGroup, Input, Table} from "reactstrap";
 
-const UserData = [
-        {
-            "cn": "James Forcier",
-            "drinkBalance": 18500,
-            "uid": "jmf"
-        },
-        {
-            "cn": "Paul Ugolini",
-            "drinkBalance": 686,
-            "uid": "pau"
-        },
-        {
-            "cn": "Ram Zallan",
-            "drinkBalance": -275,
-            "uid": "ram"
-        },
-        {
-            "cn": "Tim",
-            "drinkBalance": 0,
-            "uid": "tim"
-        },
-        {
-            "cn": "Warren R Carithers",
-            "drinkBalance": 0,
-            "uid": "wrc"
-        },
-        {
-            "cn": "Eero Kelly",
-            "drinkBalance": 623,
-            "uid": "eero"
-        },
-        {
-            "cn": "Julien Eid",
-            "drinkBalance": 7359,
-            "uid": "jeid"
-        },
-        {
-            "cn": "Leul Behane-Meskel",
-            "drinkBalance": 5073,
-            "uid": "leul"
-        },
-        {
-            "cn": "Nick Depinet",
-            "drinkBalance": 7520,
-            "uid": "nick"
-        },
-        {
-            "cn": "Owen Sullivan",
-            "drinkBalance": 5,
-            "uid": "owen"
-        },
-        {
-            "cn": "Russ Harmon",
-            "drinkBalance": 2001,
-            "uid": "russ"
-        },
-        {
-            "cn": "Ryan Boyd",
-            "drinkBalance": 220,
-            "uid": "ryan"
-        },
-        {
-            "cn": "Eric Schumann",
-            "drinkBalance": 905,
-            "uid": "schu"
-        },
-        {
-            "cn": "Zach Hart",
-            "drinkBalance": 42069,
-            "uid": "zach"
-        },
-        {
-            "cn": "Ayush Goel",
-            "drinkBalance": 481,
-            "uid": "agoel"
-        },
-        {
-            "cn": "Andy Potter",
-            "drinkBalance": 298,
-            "uid": "andyp"
-        },
-        {
-            "cn": "Aruna Sooknarine",
-            "drinkBalance": 0,
-            "uid": "aruna"
-        },
-        {
-            "cn": "Aryeh Lieberman",
-            "drinkBalance": 25,
-            "uid": "aryeh"
-        },
-        {
-            "cn": "Audra Pawlak",
-            "drinkBalance": 0,
-            "uid": "audra"
-        },
-        {
-            "cn": "Brent A. Daigle",
-            "drinkBalance": 0,
-            "uid": "bagel"
-        },
-        {
-            "cn": "Barry Culhane",
-            "drinkBalance": 0,
-            "uid": "barry"
-        },
-        {
-            "cn": "Brandon Chiu",
-            "drinkBalance": 1,
-            "uid": "bchiu"
-        },
-        {
-            "cn": "Grant Cohoe",
-            "drinkBalance": 635,
-            "uid": "cohoe"
-        },
-        {
-            "cn": "Corry Haines",
-            "drinkBalance": 619,
-            "uid": "corry"
-        },
-        {
-            "cn": "Drew Gottlieb",
-            "drinkBalance": 538,
-            "uid": "dag10"
-        },
-        {
-            "cn": "Nicholas Mercadante",
-            "drinkBalance": 0,
-            "uid": "dante"
-        },
-        {
-            "cn": "Stephen Demos",
-            "drinkBalance": 41,
-            "uid": "demos"
-        },
-        {
-            "cn": "Owen Miller",
-            "drinkBalance": 3,
-            "uid": "euler"
-        },
-        {
-            "cn": "Jeff Mahoney",
-            "drinkBalance": 0,
-            "uid": "jeffm"
-        },
-        {
-            "cn": "Linus",
-            "drinkBalance": 0,
-            "uid": "linus"
-        },
-        {
-            "cn": "Mihir Singh",
-            "drinkBalance": 56,
-            "uid": "mihir"
-        },
-];
+import User from './User';
+import { fetchUsers } from '../../actions';
+import InfoSpinner from "../InfoSpinner";
+
 
 class UserList extends Component {
     constructor(props) {
@@ -170,9 +17,21 @@ class UserList extends Component {
         };
     }
 
+    componentDidMount() {
+        if (this.props.oidc.user && !this.props.users) {
+            this.props.getUsers(this.props.oidc.user.access_token);
+        }
+    }
+
     render() {
+        console.log("User props:\n", this.props)
+        if (!this.props.users) {
+            return (<InfoSpinner>Loading users</InfoSpinner>);
+        } else if (!this.props.users.length) {
+            return (<h2>No users found</h2>);
+        }
         const filterLen = this.state.filterStr.length;
-        const users = UserData
+        const users = this.props.users
             .filter(user => (filterLen > 0
                 ? (this.state.filterStr === user.uid.substring(0, filterLen)
                     || this.state.filterStr === user.cn.substring(0, filterLen))
@@ -221,4 +80,17 @@ class UserList extends Component {
     }
 }
 
-export default UserList;
+const mapStateToProps = state => ({
+    oidc: state.oidc,
+    users: state.apis.users.users,
+});
+
+const mapDispatchToProps = dispatch => ({
+    getUsers: access_token => fetchUsers(dispatch, access_token)
+});
+
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(UserList);
