@@ -44,8 +44,7 @@ body {
     margin-bottom: 20px;
 }
 
-a.disabled,
-button.disabled {
+.btn:disabled {
     opacity: 0.3;
     cursor: not-allowed;
 }

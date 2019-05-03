@@ -22,7 +22,7 @@ class MachineCard extends Component {
                     <Card>
                         <CardHeader>{this.getName(this.props.name)}</CardHeader>
                         <CardBody>
-                            <SlotList slots={this.props.slots} isSnack={isSnack} isDrinkAdmin={this.props.isDrinkAdmin}/>
+                            <SlotList machine={this.props.name} slots={this.props.slots} isSnack={isSnack} isDrinkAdmin={this.props.isDrinkAdmin}/>
                         </CardBody>
                     </Card>
                 </Col>

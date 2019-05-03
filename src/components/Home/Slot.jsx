@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import { connect } from "react-redux";
+
 import DropModal from './DropModal';
 import {ListGroupItem, Badge, ButtonGroup, Button} from "reactstrap";
 
@@ -7,6 +9,8 @@ class Slot extends Component {
         super(props);
         this.state = {
           modal: false,
+          dropError: this.props.dropError,
+          dropLoading: this.props.dropLoading,
         };
 
         this.toggle = this.toggle.bind(this);
@@ -14,8 +18,17 @@ class Slot extends Component {
 
     toggle() {
         this.setState(prevState => ({
-            modal: !prevState.modal
+            modal: !prevState.modal,
+            dropError: null, // clear old error
+            dropLoading: false,
         }));
+    }
+
+    componentWillReceiveProps(nextProps) {
+      this.setState({
+          dropError: nextProps.dropError,
+          dropLoading: nextProps.dropLoading,
+      });
     }
 
     render() {
@@ -26,13 +39,17 @@ class Slot extends Component {
                 <span className="pull-right">
                     <Badge pill color="info">{this.props.slot.price} credits</Badge>&nbsp;
                     <ButtonGroup size="sm" className="pull-right">
-                        <Button onClick={this.toggle} disabled={this.props.slot.empty} color="primary">Drop</Button>
+                        <Button onClick={this.toggle} disabled={this.props.slot.empty || this.props.drink_balance < this.props.slot.price} color="primary">Drop</Button>
                         {this.props.isDrinkAdmin && <Button color="info">Edit</Button>}
                     </ButtonGroup>
                     <DropModal
+                        machine={this.props.machine}
+                        slot={this.props.slotNum}
                         drink={this.props.slot.name}
                         toggle={this.toggle}
                         modal={this.state.modal}
+                        dropError={this.state.dropError}
+                        dropLoading={this.state.dropLoading}
                     />
                 </span>
             </ListGroupItem>
@@ -40,4 +57,12 @@ class Slot extends Component {
     }
 }
 
-export {Slot};
+const mapStateToProps = state => ({
+  drink_balance: (state.apis.credits.user || {}).drinkBalance,
+  dropError: state.apis.drop.error,
+  dropLoading: state.apis.isFetching,
+});
+
+export default connect(
+    mapStateToProps
+)(Slot);

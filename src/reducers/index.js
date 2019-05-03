@@ -11,10 +11,12 @@ import {
   RECEIVE_USERS,
   REQUEST_CREDITS,
   RECEIVE_CREDITS,
+  REQUEST_DROP,
+  RECEIVE_DROP,
 } from '../actions';
 
 
-function apis(state = {isFetching: false, stock: [], items: [], users: [], credits: {}}, action) {
+function apis(state = {isFetching: false, stock: [], items: [], users: [], credits: {}, drop: {}}, action) {
   switch(action.type) {
     case REQUEST_STOCK:
       return Object.assign({}, state, {
@@ -54,6 +56,16 @@ function apis(state = {isFetching: false, stock: [], items: [], users: [], credi
       return Object.assign({}, state, {
         isFetching: false,
         credits: action.credits,
+        lastUpdated: action.receivedAt,
+      });
+    case REQUEST_DROP:
+      return Object.assign({}, state, {
+        isFetching: true,
+      });
+    case  RECEIVE_DROP:
+      return Object.assign({}, state, {
+        isFetching: false,
+        drop: action.drop,
         lastUpdated: action.receivedAt,
       });
     default:

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Slot} from './Slot';
+import Slot from './Slot';
 import {ListGroup, Row, Col} from "reactstrap";
 
 class SlotList extends Component {
@@ -18,7 +18,13 @@ class SlotList extends Component {
     renderSlotList() {
         const Slots = Object.keys(this.props.slots).map((slot, index) => {
             return (
-                    <Slot key={index} slot={this.props.slots[slot]} isDrinkAdmin={this.props.isDrinkAdmin}/>
+                    <Slot
+                        key={index}
+                        slot={this.props.slots[slot]}
+                        machine={this.props.machine}
+                        slotNum={index + 1}
+                        isDrinkAdmin={this.props.isDrinkAdmin}
+                    />
             )
         });
         this.setState({Slots});
