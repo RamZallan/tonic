@@ -11,8 +11,10 @@ import {
     NavBar,
     ItemList,
     UserList,
+    /*
     LogList,
     Temperatures,
+    */
 } from './index';
 
 
@@ -37,8 +39,10 @@ class App extends Component {
                             <ProtectedRoute exact path="/" component={Home}/>
                             <ProtectedRoute exact path="/users" component={UserList}/>
                             <ProtectedRoute exact path="/items" component={ItemList}/>
+                            {/*
                             <ProtectedRoute exact path="/temps" component={Temperatures}/>
                             <ProtectedRoute exact path="/logs" component={LogList}/>
+                            */}
                         </Switch>
                     </Container>
                 </Container>

@@ -57,6 +57,7 @@ class NavBar extends React.Component {
                                               to={'/items'}>
                                                 Items
                                             </DropdownItem>
+                                            {/*
                                             <DropdownItem
                                               activeClassName="active"
                                               exact={true}
@@ -71,6 +72,7 @@ class NavBar extends React.Component {
                                               to={'/logs'}>
                                                 Logs
                                             </DropdownItem>
+                                            */}
                                         </DropdownMenu>
                                     </UncontrolledDropdown>
                                 }
