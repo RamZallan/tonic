@@ -11,16 +11,20 @@ class SlotList extends Component {
         };
     }
 
-    componentDidMount() {
-        this.renderSlotList();
+    componentDidUpdate(prevProps) {
+        if (this.props.slots !== prevProps.slots) {
+            this.renderSlotList();
+        }
     }
 
     renderSlotList() {
-        const Slots = Object.keys(this.props.slots).map((slot, index) => {
+        const Slots = this.props.slots
+            .sort((a, b) => (a.number - b.number))
+            .map((slot, index) => {
             return (
                     <Slot
-                        key={index}
-                        slot={this.props.slots[slot]}
+                        key={slot.number}
+                        slot={slot}
                         machine={this.props.machine}
                         slotNum={index + 1}
                         isDrinkAdmin={this.props.isDrinkAdmin}

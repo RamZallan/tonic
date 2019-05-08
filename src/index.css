@@ -16,7 +16,7 @@ body {
     margin-right: 5px;
 }
 
-.log-filters label,{
+.log-filters label {
     margin-right: 15px;
 }
 
@@ -36,15 +36,25 @@ body {
     background: rgba(0, 0, 0, 0.03);
 }
 
+.price-badge {
+    margin-top: 4px;
+    margin-right: 10px;
+    font-size: 11px;
+}
+
 .collapse-filters {
     margin: 15px 0;
 }
 
-[class^="col-"] {
+
+.card {
     margin-bottom: 20px;
 }
 
-.btn:disabled {
+.btn:disabled,
+.disabled .text,
+.disabled .drop,
+.disabled .badge {
     opacity: 0.3;
     cursor: not-allowed;
 }
@@ -66,4 +76,9 @@ body {
 
 .input-group button {
     font-size: 0.7rem;
+}
+
+#newItem {
+    text-align: center;
+    padding-top: 15px;
 }

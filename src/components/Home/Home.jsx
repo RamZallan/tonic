@@ -15,19 +15,18 @@ class Home extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props !== prevProps && this.props.stock) {
+        if (this.props.stock !== prevProps.stock && this.props.stock) {
             this.renderMachineCards();
         }
     }
 
     renderMachineCards() {
-        // Not sure where we will be keeping data
-        const Machines = Object.keys(this.props.stock).map((item, index) => {
+        const Machines = this.props.stock.map((machine, index) => {
             return (
                     <MachineCard
-                        key={index}
-                        name={item}
-                        slots={this.props.stock[item]}
+                        key={machine.id}
+                        machine={machine}
+                        slots={machine.slots}
                         isDrinkAdmin={this.props.isDrinkAdmin}
                     />
             );

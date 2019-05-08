@@ -16,7 +16,7 @@ class DropModal extends React.Component {
     }
 
     drop() {
-        this.props.dropDrink(this.props.oidc.user.access_token, this.props.machine, this.props.slot);
+        this.props.dropDrink(this.props.oidc.user.access_token, this.props.machine.name, this.props.slot);
     }
 
     componentWillReceiveProps(nextProps) {

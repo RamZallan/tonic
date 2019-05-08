@@ -2,25 +2,34 @@ import React, {Component} from 'react';
 import { connect } from "react-redux";
 
 import DropModal from './DropModal';
+import EditSlotModal from './EditSlotModal';
 import {ListGroupItem, Badge, ButtonGroup, Button} from "reactstrap";
 
 class Slot extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          modal: false,
+          dropModal: false,
+          editModal: false,
           dropError: this.props.dropError,
           dropLoading: this.props.dropLoading,
         };
 
-        this.toggle = this.toggle.bind(this);
+        this.toggleDropModal = this.toggleDropModal.bind(this);
+        this.toggleEditModal = this.toggleEditModal.bind(this);
     }
 
-    toggle() {
+    toggleDropModal() {
         this.setState(prevState => ({
-            modal: !prevState.modal,
+            dropModal: !prevState.dropModal,
             dropError: null, // clear old error
             dropLoading: false,
+        }));
+    }
+
+    toggleEditModal() {
+        this.setState(prevState => ({
+            editModal: !prevState.editModal,
         }));
     }
 
@@ -33,24 +42,37 @@ class Slot extends Component {
 
     render() {
         return (
-            <ListGroupItem className="drink-item" tag="a" href="#" disabled={this.props.slot.empty}>
-                    {this.props.slot.name}
+            <ListGroupItem className="drink-item" disabled={!this.props.slot.active}>
+                <span className="text">{this.props.slot.item.name}</span>
 
                 <span className="pull-right">
-                    <Badge pill color="info">{this.props.slot.price} credits</Badge>&nbsp;
+                    <Badge className="price-badge" color="success">{this.props.slot.item.price} credits</Badge>
                     <ButtonGroup size="sm" className="pull-right">
-                        <Button onClick={this.toggle} disabled={this.props.slot.empty || this.props.drink_balance < this.props.slot.price} color="primary">Drop</Button>
-                        {this.props.isDrinkAdmin && <Button color="info">Edit</Button>}
+                        <Button className="drop" onClick={this.toggleDropModal} disabled={!this.props.slot.active || this.props.drink_balance < this.props.slot.item.price} color="primary">Drop</Button>
+                        {this.props.isDrinkAdmin && (
+                            <Button color="info" onClick={this.toggleEditModal}>Edit</Button>
+                        )}
                     </ButtonGroup>
-                    <DropModal
-                        machine={this.props.machine}
-                        slot={this.props.slotNum}
-                        drink={this.props.slot.name}
-                        toggle={this.toggle}
-                        modal={this.state.modal}
-                        dropError={this.state.dropError}
-                        dropLoading={this.state.dropLoading}
-                    />
+                    {this.state.dropModal && (
+                        <DropModal
+                            machine={this.props.machine}
+                            slot={this.props.slotNum}
+                            drink={this.props.slot.item.name}
+                            toggle={this.toggleDropModal}
+                            modal={this.state.dropModal}
+                            dropError={this.state.dropError}
+                            dropLoading={this.state.dropLoading}
+                        />
+                    )}
+                    {this.state.editModal && (
+                        <EditSlotModal
+                            machine={this.props.machine}
+                            slot={this.props.slotNum}
+                            toggle={this.toggleEditModal}
+                            modal={this.state.editModal}
+                            drink={this.props.slot}
+                        />
+                    )}
                 </span>
             </ListGroupItem>
         );

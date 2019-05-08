@@ -15,6 +15,23 @@ export const RECEIVE_CREDITS = 'RECEIVE_CREDITS';
 export const REQUEST_DROP = 'REQUEST_DROP';
 export const RECEIVE_DROP = 'RECEIVE_DROP';
 
+export const REQUEST_CREDITS_UPDATE = 'REQUEST_CREDITS_UPDATE';
+export const RECEIVE_CREDITS_UPDATE = 'RECEIVE_CREDITS_UPDATE';
+
+export const REQUEST_ITEM_UPDATE = 'REQUEST_ITEM_UPDATE';
+export const RECEIVE_ITEM_UPDATE = 'RECEIVE_ITEM_UPDATE';
+
+export const REQUEST_ITEM_DELETE = 'REQUEST_ITEM_DELETE';
+export const RECEIVE_ITEM_DELETE = 'RECEIVE_ITEM_DELETE';
+
+export const CLEAR_TXN_RESPONSES = 'CLEAR_TXN_RESPONSES';
+
+export const REQUEST_ITEM_ADD = 'REQUEST_ITEM_ADD';
+export const RECEIVE_ITEM_ADD = 'RECEIVE_ITEM_ADD';
+
+export const REQUEST_SLOT_ACTIVE = 'REQUEST_SLOT_ACTIVE';
+export const RECEIVE_SLOT_ACTIVE = 'RECEIVE_SLOT_ACTIVE';
+
 function GET(access_token, route) {
     return fetch('https://mizu-dev.cs.house' + route, {
         method: 'GET',
@@ -22,7 +39,7 @@ function GET(access_token, route) {
         headers: {
             'Authorization': 'Bearer ' + access_token,
         },
-    }).catch(error => console.log(error));
+    });
 }
 
 function POST(access_token, route, body) {
@@ -34,7 +51,31 @@ function POST(access_token, route, body) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
-    }).catch(error => console.log(error));
+    });
+}
+
+function PUT(access_token, route, body) {
+    return fetch('https://mizu-dev.cs.house' + route, {
+        method: 'PUT',
+        mode: 'cors',
+        headers: {
+            'Authorization': 'Bearer ' + access_token,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    });
+}
+
+function DELETE(access_token, route, body) {
+    return fetch('https://mizu-dev.cs.house' + route, {
+        method: 'DELETE',
+        mode: 'cors',
+        headers: {
+            'Authorization': 'Bearer ' + access_token,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    });
 }
 
 export function requestStock() {
@@ -107,6 +148,82 @@ export function responseDropDrink(json) {
     };
 }
 
+export function requestUpdateUserCredits() {
+    return {
+        type: REQUEST_CREDITS_UPDATE,
+    };
+}
+
+export function responseUpdateUserCredits(json) {
+    return {
+        type: RECEIVE_CREDITS_UPDATE,
+        creditsUpdate: json,
+        receivedAt: Date.now(),
+    };
+}
+
+export function requestUpdateItem() {
+    return {
+        type: REQUEST_ITEM_UPDATE,
+    };
+}
+
+export function responseUpdateItem(json) {
+    return {
+        type: RECEIVE_ITEM_UPDATE,
+        updateItem: json,
+        receivedAt: Date.now(),
+    };
+}
+
+export function requestDeleteItem() {
+    return {
+        type: REQUEST_ITEM_DELETE,
+    };
+}
+
+export function responseDeleteItem(json) {
+    return {
+        type: RECEIVE_ITEM_DELETE,
+        deleteItem: json,
+        receivedAt: Date.now(),
+    };
+}
+
+export function clearResponses() {
+    return {
+        type: CLEAR_TXN_RESPONSES,
+    };
+}
+
+export function requestAddItem() {
+    return {
+        type: REQUEST_ITEM_ADD,
+    };
+}
+
+export function responseAddItem(json) {
+    return {
+        type: RECEIVE_ITEM_ADD,
+        addItem: json,
+        receivedAt: Date.now(),
+    };
+}
+
+export function requestChangeSlotActive() {
+    return {
+        type: REQUEST_SLOT_ACTIVE,
+    };
+}
+
+export function responseChangeSlotActive(json) {
+    return {
+        type: RECEIVE_SLOT_ACTIVE,
+        changeSlotActive: json,
+        receivedAt: Date.now(),
+    };
+}
+
 export function fetchStock(dispatch, access_token) {
     dispatch(requestStock());
     return GET(access_token, '/drinks')
@@ -144,4 +261,65 @@ export function dropDrink(dispatch, access_token, machine, slot) {
     return POST(access_token, '/drinks/drop', body)
         .then(response => response.json())
         .then(json => dispatch(responseDropDrink(json)));
+}
+
+export function updateUserCredits(dispatch, access_token, uid, drinkBalance) {
+    dispatch(requestUpdateUserCredits());
+    const body = {
+        uid,
+        drinkBalance,
+    };
+    return PUT(access_token, '/users/credits', body)
+        .then(response => response.json())
+        .then(json => dispatch(responseUpdateUserCredits(json)));
+}
+
+export function updateItem(dispatch, access_token, id, name, price) {
+    dispatch(requestUpdateItem());
+    const body = {
+        id,
+        name,
+        price,
+    };
+    return PUT(access_token, '/items', body)
+        .then(response => response.json())
+        .then(json => dispatch(responseUpdateItem(json)));
+}
+
+export function deleteItem(dispatch, access_token, id) {
+    dispatch(requestDeleteItem());
+    const body = {
+        id,
+    };
+    return DELETE(access_token, '/items', body)
+        .then(response => response.json())
+        .then(json => dispatch(responseDeleteItem(json)));
+}
+
+export function clearTransactionResponses(dispatch) {
+    return dispatch(clearResponses());
+}
+
+export function addItem(dispatch, access_token, name, price) {
+    dispatch(requestAddItem());
+    const body = {
+        name,
+        price,
+    };
+    return POST(access_token, '/items', body)
+        .then(response => response.json())
+        .then(json => dispatch(responseAddItem(json)));
+}
+
+export function changeSlotActive(dispatch, access_token, machine, slot, active, item_id) {
+    dispatch(requestChangeSlotActive());
+    const body = {
+        active,
+        item_id,
+        machine,
+        slot,
+    };
+    return PUT(access_token, '/slots', body)
+        .then(response => response.json())
+        .then(json => dispatch(responseChangeSlotActive(json)));
 }
