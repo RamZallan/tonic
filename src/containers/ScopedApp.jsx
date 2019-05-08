@@ -3,7 +3,7 @@ import App from "../components/App";
 import { fetchStock, fetchCredits } from '../actions';
 
 const mapStateToProps = state => ({
-  isDrinkAdmin: (((state.oidc.user || {}).profile || {}).groups || []).includes("webmaster"),
+  isDrinkAdmin: (((state.oidc.user || {}).profile || {}).groups || []).includes("drink"),
   oidc: state.oidc,
   stock: state.apis.stock.machines,
   credits: (state.apis.credits.user || {}).drinkBalance

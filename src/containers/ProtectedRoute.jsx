@@ -15,7 +15,7 @@ const ProtectedRoute = ({ component: Component, user, ...args }) => (
     }
 
     //TODO FIX DRINK ADMIN FROM WEBMASTER
-    return <Component {...props} isDrinkAdmin={(((user.profile || {}).groups || []).includes("webmaster"))}/>;
+    return <Component {...props} isDrinkAdmin={(((user.profile || {}).groups || []).includes("drink"))}/>;
   }}/>
 );
 
