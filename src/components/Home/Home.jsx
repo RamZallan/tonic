@@ -6,22 +6,11 @@ import MachineCard from './MachineCard';
 import InfoSpinner from "../InfoSpinner";
 
 class Home extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            Machines: null
-        };
-    }
-
-    componentDidUpdate(prevProps) {
-        if (this.props.stock !== prevProps.stock && this.props.stock) {
-            this.renderMachineCards();
+    render() {
+        if (!this.props.stock) {
+            return (<InfoSpinner>Loading drinks</InfoSpinner>);
         }
-    }
-
-    renderMachineCards() {
-        const Machines = this.props.stock.map((machine, index) => {
+        const machines = this.props.stock.map((machine, index) => {
             return (
                     <MachineCard
                         key={machine.id}
@@ -31,17 +20,13 @@ class Home extends Component {
                     />
             );
         });
-        this.setState({Machines});
-    }
-
-    render() {
         return (
             <Container>
             <Row>
-                {this.props.stock ? this.state.Machines : <InfoSpinner>Loading drinks</InfoSpinner>}
+                {machines}
             </Row>
             </Container>
-        )
+        );
     }
 }
 

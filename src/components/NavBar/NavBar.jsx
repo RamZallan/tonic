@@ -26,10 +26,10 @@ class NavBar extends React.Component {
                 <Navbar color="primary" dark expand="md" fixed="top">
                     <Container>
                         <NavbarBrand
+                            tag={RouterNavLink}
                             activeClassName="active"
                             exact={true}
-                            tag={RouterNavLink}
-                            to={'/'}>
+                            to="/">
                                 WebDrink
                         </NavbarBrand>
                         <NavbarToggler onClick={this.toggle}/>
