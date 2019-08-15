@@ -118,7 +118,7 @@ class UserList extends Component {
                 :
                     (<div>
                         {this.state.filterStr.length ?
-                            "No results found for filter '" + this.state.filterStr + "'."
+                            `No results matching "${this.state.filterStr}".`
                         :   "Enter a search query to find users."
                         }
                     </div>)

@@ -81,3 +81,6 @@ typings/
 
 # Cloud 9
 .c9/
+
+# Swap files
+*.swp
