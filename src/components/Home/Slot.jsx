@@ -41,14 +41,15 @@ class Slot extends Component {
     }
 
     render() {
+        const disabled = this.props.slot.empty || !this.props.slot.active;
         return (
-            <ListGroupItem className="drink-item" disabled={!this.props.slot.active}>
+            <ListGroupItem className="drink-item" disabled={disabled}>
                 <span className="text">{this.props.slot.item.name}</span>
 
                 <span className="pull-right">
                     <Badge className="price-badge" color="success">{this.props.slot.item.price} credits</Badge>
                     <ButtonGroup size="sm" className="pull-right">
-                        <Button className="drop" onClick={this.toggleDropModal} disabled={!this.props.slot.active || this.props.drink_balance < this.props.slot.item.price} color="primary">Drop</Button>
+                        <Button className="drop" onClick={this.toggleDropModal} disabled={disabled || this.props.drink_balance < this.props.slot.item.price} color="primary">Drop</Button>
                         {this.props.isDrinkAdmin && (
                             <Button color="info" onClick={this.toggleEditModal}>Edit</Button>
                         )}
