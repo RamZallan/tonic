@@ -97,9 +97,9 @@ class EditSlotModal extends React.Component {
         }
         let itemOptions;
         if (this.props.items) {
-            itemOptions = this.props.items.map(item => {
-                return (<option value={item.id} key={item.id}>{item.name}</option>);
-            });
+            itemOptions = this.props.items
+                .sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)
+                .map(item => (<option value={item.id} key={item.id}>{item.name}</option>));
         }
         return (
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
