@@ -51,7 +51,7 @@ function POST(access_token, route, body) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
-    });
+    }).catch(err => console.log(err));
 }
 
 function PUT(access_token, route, body) {
@@ -63,7 +63,7 @@ function PUT(access_token, route, body) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
-    });
+    }).catch(err => console.log(err));
 }
 
 function DELETE(access_token, route, body) {
@@ -75,7 +75,7 @@ function DELETE(access_token, route, body) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
-    });
+    }).catch(err => console.log(err));
 }
 
 export function requestStock() {

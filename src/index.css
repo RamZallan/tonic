@@ -59,6 +59,10 @@ body {
     cursor: not-allowed;
 }
 
+.list-group-item.disabled, .list-group-item:disabled {
+    pointer-events: auto;
+}
+
 .pull-right {
     float: right;
 }
