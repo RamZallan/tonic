@@ -11,8 +11,6 @@ class Slot extends Component {
         this.state = {
           dropModal: false,
           editModal: false,
-          dropError: this.props.dropError,
-          dropLoading: this.props.dropLoading,
         };
 
         this.toggleDropModal = this.toggleDropModal.bind(this);
@@ -22,8 +20,6 @@ class Slot extends Component {
     toggleDropModal() {
         this.setState(prevState => ({
             dropModal: !prevState.dropModal,
-            dropError: null, // clear old error
-            dropLoading: false,
         }));
     }
 
@@ -31,13 +27,6 @@ class Slot extends Component {
         this.setState(prevState => ({
             editModal: !prevState.editModal,
         }));
-    }
-
-    componentWillReceiveProps(nextProps) {
-      this.setState({
-          dropError: nextProps.dropError,
-          dropLoading: nextProps.dropLoading,
-      });
     }
 
     render() {
@@ -61,8 +50,7 @@ class Slot extends Component {
                             drink={this.props.slot.item.name}
                             toggle={this.toggleDropModal}
                             modal={this.state.dropModal}
-                            dropError={this.state.dropError}
-                            dropLoading={this.state.dropLoading}
+                            dropResult={this.props.dropResult}
                         />
                     )}
                     {this.state.editModal && (
@@ -82,7 +70,7 @@ class Slot extends Component {
 
 const mapStateToProps = state => ({
   drink_balance: (state.apis.credits.user || {}).drinkBalance,
-  dropError: state.apis.drop.error,
+  dropResult: state.apis.drop,
   dropLoading: state.apis.isFetching,
 });
 

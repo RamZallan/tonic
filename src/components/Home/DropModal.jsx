@@ -20,23 +20,36 @@ class DropModal extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-      this.setState({
-          modal: nextProps.modal,
-      });
+        this.setState({
+            modal: nextProps.modal,
+        });
     }
 
     render() {
+        let alert = '';
+        if (this.props.dropResult.error) {
+            alert = (
+                <ModalBody>
+                    <Alert color="danger">
+                        <b>Error: </b>
+                        {this.props.dropResult.error}
+                    </Alert>
+                </ModalBody>
+            );
+        } else if (this.props.dropResult.message && this.props.dropResult.message.includes('Drop successful')) {
+            setTimeout(this.props.toggle, 2000);
+            alert = (
+                <ModalBody>
+                    <Alert color="success">
+                        <b>{this.props.dropResult.message}</b>
+                    </Alert>
+                </ModalBody>
+            );
+        }
         return (
             <Modal size="sm" isOpen={this.state.modal} toggle={this.props.toggle}>
                 <ModalHeader toggle={this.props.toggle}>Drop a <b>{this.props.drink}</b>?</ModalHeader>
-                {this.props.dropError && (
-                    <ModalBody>
-                      <Alert color="danger">
-                        <b>Error: </b>
-                        {this.props.dropError}
-                      </Alert>
-                    </ModalBody>
-                )}
+                {alert}
                 <ModalFooter>
                     <Button color="success" onClick={this.drop}>Confirm</Button>
                 </ModalFooter>
@@ -46,14 +59,14 @@ class DropModal extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  oidc: state.oidc,
+    oidc: state.oidc,
 });
 
 const mapDispatchToProps = dispatch => ({
-  dropDrink: (access_token, machine, slot) => dropDrink(dispatch, access_token, machine, slot),
+    dropDrink: (access_token, machine, slot) => dropDrink(dispatch, access_token, machine, slot),
 });
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(DropModal);
