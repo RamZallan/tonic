@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 
 import { dropDrink, clearTransactionResponses } from '../../actions';
+import InfoSpinner from "../InfoSpinner";
 
 
 class DropModal extends React.Component {
@@ -54,7 +55,11 @@ class DropModal extends React.Component {
                 <ModalHeader toggle={this.props.toggle}>Drop a <b>{this.props.drink}</b>?</ModalHeader>
                 {alert}
                 <ModalFooter>
-                    <Button color="success" onClick={this.drop}>Confirm</Button>
+                    {this.props.dropLoading ? (
+                        <Button color="success" disabled ><InfoSpinner>Dropping</InfoSpinner></Button>
+                    ) : (
+                        <Button color="success" onClick={this.drop}>Confirm</Button>
+                    )}
                 </ModalFooter>
             </Modal>
         );

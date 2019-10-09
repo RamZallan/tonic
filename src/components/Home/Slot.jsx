@@ -51,6 +51,7 @@ class Slot extends Component {
                             toggle={this.toggleDropModal}
                             modal={this.state.dropModal}
                             dropResult={this.props.dropResult}
+                            dropLoading={this.props.dropLoading}
                         />
                     )}
                     {this.state.editModal && (
