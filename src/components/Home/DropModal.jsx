@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 
-import { dropDrink } from '../../actions';
+import { dropDrink, clearTransactionResponses } from '../../actions';
 
 
 class DropModal extends React.Component {
@@ -37,7 +37,10 @@ class DropModal extends React.Component {
                 </ModalBody>
             );
         } else if (this.props.dropResult.message && this.props.dropResult.message.includes('Drop successful')) {
-            setTimeout(this.props.toggle, 2000);
+            setTimeout(() => {
+                this.props.toggle();
+                this.props.clearTransactionResponses();
+            }, 2000);
             alert = (
                 <ModalBody>
                     <Alert color="success">
@@ -64,6 +67,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     dropDrink: (access_token, machine, slot) => dropDrink(dispatch, access_token, machine, slot),
+    clearTransactionResponses: () => clearTransactionResponses(dispatch),
 });
 
 export default connect(
