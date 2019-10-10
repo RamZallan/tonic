@@ -32,8 +32,10 @@ export const RECEIVE_ITEM_ADD = 'RECEIVE_ITEM_ADD';
 export const REQUEST_SLOT_ACTIVE = 'REQUEST_SLOT_ACTIVE';
 export const RECEIVE_SLOT_ACTIVE = 'RECEIVE_SLOT_ACTIVE';
 
+const SERVER_ADDRESS = 'https://drink.csh.rit.edu'
+
 function GET(access_token, route) {
-    return fetch('https://mizu-dev.cs.house' + route, {
+    return fetch(SERVER_ADDRESS + route, {
         method: 'GET',
         mode: 'cors',
         headers: {
@@ -43,7 +45,7 @@ function GET(access_token, route) {
 }
 
 function POST(access_token, route, body) {
-    return fetch('https://mizu-dev.cs.house' + route, {
+    return fetch(SERVER_ADDRESS + route, {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -55,7 +57,7 @@ function POST(access_token, route, body) {
 }
 
 function PUT(access_token, route, body) {
-    return fetch('https://mizu-dev.cs.house' + route, {
+    return fetch(SERVER_ADDRESS + route, {
         method: 'PUT',
         mode: 'cors',
         headers: {
@@ -67,7 +69,7 @@ function PUT(access_token, route, body) {
 }
 
 function DELETE(access_token, route, body) {
-    return fetch('https://mizu-dev.cs.house' + route, {
+    return fetch(SERVER_ADDRESS + route, {
         method: 'DELETE',
         mode: 'cors',
         headers: {
