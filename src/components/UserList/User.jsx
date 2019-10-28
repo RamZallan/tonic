@@ -90,8 +90,8 @@ class User extends Component {
                         <InputGroupAddon addonType="append">
                             <ButtonGroup>
                                 <Button onClick={this.handleSet.bind(this)} color="primary">Set</Button>
-                                <Button onClick={this.handleIncrement.bind(this)} color="secondary">+</Button>
                                 <Button onClick={this.handleDecrement.bind(this)} color="secondary">-</Button>
+                                <Button onClick={this.handleIncrement.bind(this)} color="secondary">+</Button>
                             </ButtonGroup>
                         </InputGroupAddon>
                     </InputGroup>

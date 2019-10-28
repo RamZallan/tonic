@@ -82,6 +82,10 @@ body {
     font-size: 0.7rem;
 }
 
+.input-group input[type='text'] {
+    min-width: 50px;
+}
+
 #newItem {
     text-align: center;
     padding-top: 15px;
