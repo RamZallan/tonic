@@ -33,7 +33,7 @@ function apis(state = {
     items: [],
     users: [],
     credits: {},
-    drop: {},
+    drops: {},
     creditsUpdate: {},
     updateItem: {},
     deleteItem: {},
@@ -47,9 +47,21 @@ function apis(state = {
         isFetching: true,
       });
     case  RECEIVE_STOCK:
+      let drops = {};
+      for (const machine of action.stock.machines) {
+        drops[machine.name] = {
+          display_name: machine.display_name,
+          slots: machine.slots.map((slot) => ({
+            number: slot.number,
+            item: slot.item,
+            dropStatus: null,
+          })),
+        };
+      }
       return Object.assign({}, state, {
         isFetching: false,
         stock: action.stock,
+        drops,
         lastUpdated: action.receivedAt,
       });
     case REQUEST_ITEMS:
@@ -83,13 +95,26 @@ function apis(state = {
         lastUpdated: action.receivedAt,
       });
     case REQUEST_DROP:
+      drops = Object.assign({}, state.drops);
+      for (const i in drops[action.machine].slots) {
+        if (drops[action.machine].slots[i].number === action.slot) {
+          drops[action.machine].slots[i].dropStatus = { isLoading: true };
+        }
+      }
       return Object.assign({}, state, {
         isFetching: true,
+        drops,
       });
     case  RECEIVE_DROP:
+      drops = Object.assign({}, state.drops);
+      for (const i in drops[action.machine].slots) {
+        if (drops[action.machine].slots[i].number === action.slot) {
+          drops[action.machine].slots[i].dropStatus = action.drop;
+        }
+      }
       return Object.assign({}, state, {
         isFetching: false,
-        drop: action.drop,
+        drops,
         lastUpdated: action.receivedAt,
       });
     case REQUEST_CREDITS_UPDATE:
@@ -144,7 +169,6 @@ function apis(state = {
       });
     case CLEAR_TXN_RESPONSES:
       return Object.assign({}, state, {
-        drop: {},
         creditsUpdate: {},
         updateItem: {},
         deleteItem: {},

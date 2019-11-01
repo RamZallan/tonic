@@ -1,19 +1,19 @@
 import React, {Component} from 'react';
 import { connect } from "react-redux";
-
-import DropModal from './DropModal';
-import EditSlotModal from './EditSlotModal';
 import {ListGroupItem, Badge, ButtonGroup, Button} from "reactstrap";
+
+import EditSlotModal from './EditSlotModal';
+import { dropDrink } from '../../actions';
+
 
 class Slot extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          dropModal: false,
           editModal: false,
         };
 
-        this.toggleDropModal = this.toggleDropModal.bind(this);
+        this.drop = this.drop.bind(this);
         this.toggleEditModal = this.toggleEditModal.bind(this);
     }
 
@@ -29,6 +29,10 @@ class Slot extends Component {
         }));
     }
 
+    drop() {
+        this.props.dropDrink(this.props.oidc.user.access_token, this.props.machine.name, this.props.slotNum);
+    }
+
     render() {
         const disabled = this.props.slot.empty || !this.props.slot.active;
         return (
@@ -38,22 +42,11 @@ class Slot extends Component {
                 <span className="pull-right">
                     <Badge className="price-badge" color="success">{this.props.slot.item.price} credits</Badge>
                     <ButtonGroup size="sm" className="pull-right">
-                        <Button className="drop" onClick={this.toggleDropModal} disabled={disabled || this.props.drink_balance < this.props.slot.item.price} color="primary">Drop</Button>
+                        <Button className="drop" onClick={this.drop} disabled={disabled || this.props.drink_balance < this.props.slot.item.price} color="primary">Drop</Button>
                         {this.props.isDrinkAdmin && (
                             <Button color="info" onClick={this.toggleEditModal}>Edit</Button>
                         )}
                     </ButtonGroup>
-                    {this.state.dropModal && (
-                        <DropModal
-                            machine={this.props.machine}
-                            slot={this.props.slotNum}
-                            drink={this.props.slot.item.name}
-                            toggle={this.toggleDropModal}
-                            modal={this.state.dropModal}
-                            dropResult={this.props.dropResult}
-                            dropLoading={this.props.dropLoading}
-                        />
-                    )}
                     {this.state.editModal && (
                         <EditSlotModal
                             machine={this.props.machine}
@@ -70,11 +63,17 @@ class Slot extends Component {
 }
 
 const mapStateToProps = state => ({
+  oidc: state.oidc,
   drink_balance: (state.apis.credits.user || {}).drinkBalance,
-  dropResult: state.apis.drop,
-  dropLoading: state.apis.isFetching,
 });
 
+
+const mapDispatchToProps = dispatch => ({
+    dropDrink: (access_token, machine, slot) => dropDrink(dispatch, access_token, machine, slot),
+});
+
+
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(Slot);

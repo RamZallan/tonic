@@ -136,16 +136,20 @@ export function receiveCredits(json) {
     };
 }
 
-export function requestDropDrink() {
+export function requestDropDrink(machine, slot) {
     return {
         type: REQUEST_DROP,
+        machine,
+        slot,
     };
 }
 
-export function responseDropDrink(json) {
+export function responseDropDrink(json, machine, slot) {
     return {
         type: RECEIVE_DROP,
         drop: json,
+        machine,
+        slot,
         receivedAt: Date.now(),
     };
 }
@@ -255,14 +259,14 @@ export function fetchCredits(dispatch, access_token, uid) {
 }
 
 export function dropDrink(dispatch, access_token, machine, slot) {
-    dispatch(requestDropDrink());
+    dispatch(requestDropDrink(machine, slot));
     const body = {
         machine,
         slot,
     };
     return POST(access_token, '/drinks/drop', body)
         .then(response => response.json())
-        .then(json => dispatch(responseDropDrink(json)));
+        .then(json => dispatch(responseDropDrink(json, machine, slot)));
 }
 
 export function updateUserCredits(dispatch, access_token, uid, drinkBalance) {

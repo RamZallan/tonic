@@ -3,6 +3,7 @@ import {Container, Row} from "reactstrap";
 import { connect } from "react-redux";
 
 import MachineCard from './MachineCard';
+import Toasts from './Toasts';
 import InfoSpinner from "../InfoSpinner";
 
 class Home extends Component {
@@ -24,6 +25,7 @@ class Home extends Component {
             <Container>
             <Row>
                 {machines}
+                <Toasts />
             </Row>
             </Container>
         );

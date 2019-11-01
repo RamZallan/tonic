@@ -75,7 +75,7 @@ body {
 .input-group input.form-control {
     height: auto;
     font-size: 0.815rem;
-    
+
 }
 
 .input-group button {
@@ -89,4 +89,10 @@ body {
 #newItem {
     text-align: center;
     padding-top: 15px;
+}
+
+#toasts {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
 }
