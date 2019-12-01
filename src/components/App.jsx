@@ -15,6 +15,7 @@ import {
     LogList,
     Temperatures,
     */
+    PageNotFound
 } from './index';
 
 
@@ -43,6 +44,8 @@ class App extends Component {
                             <ProtectedRoute exact path="/temps" component={Temperatures}/>
                             <ProtectedRoute exact path="/logs" component={LogList}/>
                             */}
+
+                            <Route component={PageNotFound}/>
                         </Switch>
                     </Container>
                 </Container>

@@ -4,3 +4,4 @@ export { default as ItemList } from './ItemList';
 export { default as UserList } from './UserList';
 export { default as LogList } from './LogList';
 export { default as Temperatures } from './Temperatures';
+export { default as PageNotFound } from './PageNotFound';
