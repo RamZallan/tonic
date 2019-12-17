@@ -1,9 +1,15 @@
 import React from 'react';
-import { connect } from "react-redux";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import { connect } from 'react-redux';
+import {
+    Button,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    Alert,
+} from 'reactstrap';
 
 import { deleteItem, fetchItems } from '../../actions';
-
 
 class UpdateItemModal extends React.Component {
     constructor(props) {
@@ -30,28 +36,33 @@ class UpdateItemModal extends React.Component {
     }
 
     deleteItem() {
-        this.props.doDeleteItem(this.props.oidc.user.access_token, this.props.item.id);
+        this.props.doDeleteItem(
+            this.props.oidc.user.access_token,
+            this.props.item.id
+        );
     }
 
     componentWillReceiveProps(nextProps) {
-      this.setState({
-          modal: nextProps.modal,
-      });
+        this.setState({
+            modal: nextProps.modal,
+        });
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.deleteItemError !== this.props.deleteItemError ||
-                prevProps.deleteItem !== this.props.deleteItem) {
+        if (
+            prevProps.deleteItemError !== this.props.deleteItemError ||
+            prevProps.deleteItem !== this.props.deleteItem
+        ) {
             if (this.props.deleteItemError) {
                 this.handleAlert({
                     type: 'error',
                     message: this.props.deleteItemError,
-                })
+                });
             } else if (this.props.deleteItem.message) {
                 this.handleAlert({
                     type: 'success',
                     message: this.props.deleteItem.message,
-                })
+                });
             }
         }
     }
@@ -65,28 +76,42 @@ class UpdateItemModal extends React.Component {
     render() {
         let alertContent = '';
         if (this.state.alertObj) {
-            switch(this.state.alertObj.type) {
+            switch (this.state.alertObj.type) {
                 case 'error':
-                    alertContent = (<Alert color="danger"><b>Error: </b>{this.state.alertObj.message}</Alert>);
+                    alertContent = (
+                        <Alert color="danger">
+                            <b>Error: </b>
+                            {this.state.alertObj.message}
+                        </Alert>
+                    );
                     break;
                 case 'success':
                 default:
-                    alertContent = (<Alert color="success"><b>Success: </b>{this.state.alertObj.message}</Alert>);
+                    alertContent = (
+                        <Alert color="success">
+                            <b>Success: </b>
+                            {this.state.alertObj.message}
+                        </Alert>
+                    );
                     break;
             }
         }
         return (
             <Modal size="sm" isOpen={this.state.modal} toggle={this.toggle}>
-                <ModalHeader toggle={this.toggle}>Are you sure you want to delete "<b>{this.props.item.name}</b>"?</ModalHeader>
-                { alertContent && (<ModalBody>{alertContent}</ModalBody>) }
+                <ModalHeader toggle={this.toggle}>
+                    Are you sure you want to delete "
+                    <b>{this.props.item.name}</b>"?
+                </ModalHeader>
+                {alertContent && <ModalBody>{alertContent}</ModalBody>}
                 <ModalFooter>
-                    <Button color="danger" onClick={this.deleteItem}>Delete</Button>
+                    <Button color="danger" onClick={this.deleteItem}>
+                        Delete
+                    </Button>
                 </ModalFooter>
             </Modal>
         );
     }
 }
-
 
 const mapStateToProps = state => ({
     oidc: state.oidc,

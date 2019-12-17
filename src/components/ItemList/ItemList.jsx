@@ -1,18 +1,29 @@
-import React, {Component} from 'react';
-import { connect } from "react-redux";
-import {Form, FormGroup, Input, Table, Button, Row, Col, Card, CardBody, CardHeader, Alert} from "reactstrap";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import {
+    Form,
+    FormGroup,
+    Input,
+    Table,
+    Button,
+    Row,
+    Col,
+    Card,
+    CardBody,
+    CardHeader,
+    Alert,
+} from 'reactstrap';
 
 import Item from './Item';
 import { fetchItems, clearTransactionResponses, addItem } from '../../actions';
-import InfoSpinner from "../InfoSpinner";
-
+import InfoSpinner from '../InfoSpinner';
 
 class ItemList extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            filterStr: "",
+            filterStr: '',
             newName: null,
             newPrice: null,
             alertObj: null,
@@ -38,7 +49,7 @@ class ItemList extends Component {
         this.clearAlert();
         if (!e.target.value || !e.target.value.length) {
             this.setState({
-                newName: null
+                newName: null,
             });
         } else {
             this.setState({
@@ -52,11 +63,11 @@ class ItemList extends Component {
         let intVal = parseInt(e.target.value, 10);
         if (intVal && !isNaN(intVal)) {
             this.setState({
-                newPrice: intVal
+                newPrice: intVal,
             });
         } else {
             this.setState({
-                newPrice: null
+                newPrice: null,
             });
         }
     }
@@ -68,7 +79,11 @@ class ItemList extends Component {
                 message: 'Enter a name and price for the new item.',
             });
         } else {
-            this.props.addItem(this.props.oidc.user.access_token, this.state.newName, this.state.newPrice);
+            this.props.addItem(
+                this.props.oidc.user.access_token,
+                this.state.newName,
+                this.state.newPrice
+            );
         }
     }
 
@@ -79,18 +94,20 @@ class ItemList extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.itemAddError !== this.props.itemAddError ||
-                prevProps.itemAdd !== this.props.itemAdd) {
+        if (
+            prevProps.itemAddError !== this.props.itemAddError ||
+            prevProps.itemAdd !== this.props.itemAdd
+        ) {
             if (this.props.itemAddError) {
                 this.handleAlert({
                     type: 'error',
                     message: this.props.itemAddError,
-                })
+                });
             } else if (this.props.itemAdd.message) {
                 this.handleAlert({
                     type: 'success',
                     message: this.props.itemAdd.message,
-                })
+                });
                 this.props.getItems(this.props.oidc.user.access_token);
             }
         }
@@ -99,18 +116,21 @@ class ItemList extends Component {
     renderItemsList() {
         for (let machine of this.props.stock) {
             for (let slot of machine.slots) {
-                for(let item of this.props.items) {
+                for (let item of this.props.items) {
                     let drink = slot.item;
                     if (item.id === drink.id) {
-                        if (item['machines'] && !item['machines'].includes(machine.display_name)) {
+                        if (
+                            item['machines'] &&
+                            !item['machines'].includes(machine.display_name)
+                        ) {
                             item['machines'].push(machine.display_name);
                         } else {
                             item['machines'] = [machine.display_name];
                         }
                     }
-                };
-            };
-        };
+                }
+            }
+        }
     }
 
     wrapper() {
@@ -119,17 +139,26 @@ class ItemList extends Component {
 
     render() {
         if (!this.props.items) {
-            return (<InfoSpinner>Loading items</InfoSpinner>);
+            return <InfoSpinner>Loading items</InfoSpinner>;
         } else if (!this.props.items.length) {
-            return (<h2>No items found</h2>);
+            return <h2>No items found</h2>;
         }
         this.renderItemsList();
         const items = this.props.items
-            .filter(item => (this.state.filterStr
-                ? item.name.toLowerCase().includes(this.state.filterStr.toLowerCase())
-                : true)
+            .filter(item =>
+                this.state.filterStr
+                    ? item.name
+                          .toLowerCase()
+                          .includes(this.state.filterStr.toLowerCase())
+                    : true
             )
-            .sort((a, b) => (a.machines ? (b.machines ? (a.machines.length < b.machines.length): false) : true))
+            .sort((a, b) =>
+                a.machines
+                    ? b.machines
+                        ? a.machines.length < b.machines.length
+                        : false
+                    : true
+            )
             .map((item, index) => {
                 return (
                     <Item
@@ -141,13 +170,23 @@ class ItemList extends Component {
             });
         let alertContent = '';
         if (this.state.alertObj) {
-            switch(this.state.alertObj.type) {
+            switch (this.state.alertObj.type) {
                 case 'error':
-                    alertContent = (<Alert color="danger"><b>Error: </b>{this.state.alertObj.message}</Alert>);
+                    alertContent = (
+                        <Alert color="danger">
+                            <b>Error: </b>
+                            {this.state.alertObj.message}
+                        </Alert>
+                    );
                     break;
                 case 'success':
                 default:
-                    alertContent = (<Alert color="success"><b>Success: </b>{this.state.alertObj.message}</Alert>);
+                    alertContent = (
+                        <Alert color="success">
+                            <b>Success: </b>
+                            {this.state.alertObj.message}
+                        </Alert>
+                    );
                     break;
             }
         }
@@ -159,26 +198,41 @@ class ItemList extends Component {
 
                 <Col xs="12">
                     <Card>
-                        <CardHeader>
-                            Add new item
-                        </CardHeader>
+                        <CardHeader>Add new item</CardHeader>
                         <CardBody>
                             {alertContent}
                             <Form>
                                 <Row form>
                                     <Col xs="12" md="5">
                                         <FormGroup>
-                                            <Input onChange={e => this.handleNameChange(e)} type="text" placeholder="Name" />
+                                            <Input
+                                                onChange={e =>
+                                                    this.handleNameChange(e)
+                                                }
+                                                type="text"
+                                                placeholder="Name"
+                                            />
                                         </FormGroup>
                                     </Col>
                                     <Col xs="12" md="5">
                                         <FormGroup>
-                                            <Input onChange={e => this.handlePriceChange(e)} type="text" placeholder="Price" />
+                                            <Input
+                                                onChange={e =>
+                                                    this.handlePriceChange(e)
+                                                }
+                                                type="text"
+                                                placeholder="Price"
+                                            />
                                         </FormGroup>
                                     </Col>
                                     <Col xs="12" md="2" id="newItem">
                                         <FormGroup>
-                                            <Button color="primary" onClick={this.handleAddItem}>Add item</Button>
+                                            <Button
+                                                color="primary"
+                                                onClick={this.handleAddItem}
+                                            >
+                                                Add item
+                                            </Button>
                                         </FormGroup>
                                     </Col>
                                 </Row>
@@ -189,16 +243,22 @@ class ItemList extends Component {
 
                 <Col xs="12">
                     <Card>
-                        <CardHeader>
-                            Edit items
-                        </CardHeader>
+                        <CardHeader>Edit items</CardHeader>
                         <CardBody>
                             <Form>
                                 <FormGroup>
-                                    <Input onChange={e => this.setState({filterStr: e.target.value })} type="search" placeholder="Search"/>
+                                    <Input
+                                        onChange={e =>
+                                            this.setState({
+                                                filterStr: e.target.value,
+                                            })
+                                        }
+                                        type="search"
+                                        placeholder="Search"
+                                    />
                                 </FormGroup>
                             </Form>
-                            {items.length ?
+                            {items.length ? (
                                 <Table hover responsive>
                                     <thead>
                                         <tr>
@@ -207,18 +267,19 @@ class ItemList extends Component {
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        {items}
-                                    </tbody>
+                                    <tbody>{items}</tbody>
                                 </Table>
-                            :
-                                <div>No results matching "{this.state.filterStr}".</div>
-                            }
+                            ) : (
+                                <div>
+                                    No results matching "{this.state.filterStr}
+                                    ".
+                                </div>
+                            )}
                         </CardBody>
                     </Card>
                 </Col>
             </Row>
-        )
+        );
     }
 }
 
@@ -233,9 +294,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     getItems: access_token => fetchItems(dispatch, access_token),
     clearTransactionResponses: () => clearTransactionResponses(dispatch),
-    addItem: (access_token, name, price) => addItem(dispatch, access_token, name, price)
+    addItem: (access_token, name, price) =>
+        addItem(dispatch, access_token, name, price),
 });
-
 
 export default connect(
     mapStateToProps,

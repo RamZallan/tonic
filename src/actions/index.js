@@ -32,14 +32,14 @@ export const RECEIVE_ITEM_ADD = 'RECEIVE_ITEM_ADD';
 export const REQUEST_SLOT_ACTIVE = 'REQUEST_SLOT_ACTIVE';
 export const RECEIVE_SLOT_ACTIVE = 'RECEIVE_SLOT_ACTIVE';
 
-const SERVER_ADDRESS = 'https://drink.csh.rit.edu'
+const SERVER_ADDRESS = 'https://drink.csh.rit.edu';
 
 function GET(access_token, route) {
     return fetch(SERVER_ADDRESS + route, {
         method: 'GET',
         mode: 'cors',
         headers: {
-            'Authorization': 'Bearer ' + access_token,
+            Authorization: 'Bearer ' + access_token,
         },
     });
 }
@@ -49,7 +49,7 @@ function POST(access_token, route, body) {
         method: 'POST',
         mode: 'cors',
         headers: {
-            'Authorization': 'Bearer ' + access_token,
+            Authorization: 'Bearer ' + access_token,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
@@ -61,7 +61,7 @@ function PUT(access_token, route, body) {
         method: 'PUT',
         mode: 'cors',
         headers: {
-            'Authorization': 'Bearer ' + access_token,
+            Authorization: 'Bearer ' + access_token,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
@@ -73,7 +73,7 @@ function DELETE(access_token, route, body) {
         method: 'DELETE',
         mode: 'cors',
         headers: {
-            'Authorization': 'Bearer ' + access_token,
+            Authorization: 'Bearer ' + access_token,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
@@ -317,7 +317,14 @@ export function addItem(dispatch, access_token, name, price) {
         .then(json => dispatch(responseAddItem(json)));
 }
 
-export function changeSlotActive(dispatch, access_token, machine, slot, active, item_id) {
+export function changeSlotActive(
+    dispatch,
+    access_token,
+    machine,
+    slot,
+    active,
+    item_id
+) {
     dispatch(requestChangeSlotActive());
     const body = {
         active,

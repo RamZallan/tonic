@@ -1,9 +1,14 @@
-import React, {Component} from 'react';
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import { updateUserCredits } from '../../actions';
-import {ButtonGroup, Button, InputGroup, InputGroupAddon, Input} from "reactstrap";
-
+import {
+    ButtonGroup,
+    Button,
+    InputGroup,
+    InputGroupAddon,
+    Input,
+} from 'reactstrap';
 
 class User extends Component {
     constructor(props) {
@@ -13,11 +18,11 @@ class User extends Component {
             newVal: null,
         };
     }
-    
+
     handleEmptyInput() {
         this.props.handleAlert({
-           type: 'error',
-           message: "Enter a value into the input to update a user's balance."
+            type: 'error',
+            message: "Enter a value into the input to update a user's balance.",
         });
     }
 
@@ -26,9 +31,12 @@ class User extends Component {
             this.handleEmptyInput();
         } else {
             this.props.clearAlert();
-            this.props.updateCredits(this.props.oidc.user.access_token, this.props.uid, drinkBalance);
+            this.props.updateCredits(
+                this.props.oidc.user.access_token,
+                this.props.uid,
+                drinkBalance
+            );
         }
-
     }
 
     handleSet() {
@@ -61,9 +69,9 @@ class User extends Component {
     handleValueChange(e) {
         let intVal = parseInt(e.target.value, 10);
         if (intVal && !isNaN(intVal)) {
-            this.setState({newVal: intVal});
+            this.setState({ newVal: intVal });
         } else {
-            this.setState({newVal: null});
+            this.setState({ newVal: null });
         }
     }
 
@@ -71,27 +79,43 @@ class User extends Component {
         return (
             <tr>
                 <td>
-                <img
-                  className="rounded-circle"
-                  src={`https://profiles.csh.rit.edu/image/${this.props.uid}`}
-                  alt=""
-                  aria-hidden={true}
-                  width={20}
-                  height={20}
-                />
+                    <img
+                        className="rounded-circle"
+                        src={`https://profiles.csh.rit.edu/image/${this.props.uid}`}
+                        alt=""
+                        aria-hidden={true}
+                        width={20}
+                        height={20}
+                    />
                     {this.props.cn} ({this.props.uid})
                 </td>
-                <td>
-                    {this.props.drinkBalance}
-                </td>
+                <td>{this.props.drinkBalance}</td>
                 <td>
                     <InputGroup>
-                        <Input placeholder="Value" onChange={e => this.handleValueChange(e)}/>
+                        <Input
+                            placeholder="Value"
+                            onChange={e => this.handleValueChange(e)}
+                        />
                         <InputGroupAddon addonType="append">
                             <ButtonGroup>
-                                <Button onClick={this.handleSet.bind(this)} color="primary">Set</Button>
-                                <Button onClick={this.handleDecrement.bind(this)} color="secondary">-</Button>
-                                <Button onClick={this.handleIncrement.bind(this)} color="secondary">+</Button>
+                                <Button
+                                    onClick={this.handleSet.bind(this)}
+                                    color="primary"
+                                >
+                                    Set
+                                </Button>
+                                <Button
+                                    onClick={this.handleDecrement.bind(this)}
+                                    color="secondary"
+                                >
+                                    -
+                                </Button>
+                                <Button
+                                    onClick={this.handleIncrement.bind(this)}
+                                    color="secondary"
+                                >
+                                    +
+                                </Button>
                             </ButtonGroup>
                         </InputGroupAddon>
                     </InputGroup>
@@ -99,15 +123,15 @@ class User extends Component {
             </tr>
         );
     }
-};
-
+}
 
 const mapStateToProps = state => ({
     oidc: state.oidc,
 });
 
 const mapDispatchToProps = dispatch => ({
-    updateCredits: (access_token, uid, drinkBalance) => updateUserCredits(dispatch, access_token, uid, drinkBalance),
+    updateCredits: (access_token, uid, drinkBalance) =>
+        updateUserCredits(dispatch, access_token, uid, drinkBalance),
 });
 
 export default connect(
