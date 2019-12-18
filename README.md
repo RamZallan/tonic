@@ -55,13 +55,15 @@ Admins can search through CSH users given a search query, and set, increment, or
 
 ### Prerequisites
 
--   [Node.js](https://nodejs.org)
+-   [nvm](https://github.com/nvm-sh/nvm)
 -   [npm](https://npmjs.com)
 -   [Yarn](https://www.npmjs.com/package/yarn)
 -   [Prettier](https://prettier.io/)
 
 ### Steps
 
+-   `nvm install`
+-   `nvm use`
 -   `yarn install`
--   `yarn start`
+-   `yarn start` runs Tonic at `localhost:3000`
 -   Before committing code, run `yarn lint`

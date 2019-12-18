@@ -317,14 +317,7 @@ export function addItem(dispatch, access_token, name, price) {
         .then(json => dispatch(responseAddItem(json)));
 }
 
-export function changeSlotActive(
-    dispatch,
-    access_token,
-    machine,
-    slot,
-    active,
-    item_id
-) {
+export function changeSlotActive(dispatch, access_token, machine, slot, active, item_id) {
     dispatch(requestChangeSlotActive());
     const body = {
         active,
