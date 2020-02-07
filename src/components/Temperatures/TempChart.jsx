@@ -1,19 +1,25 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import C3Chart from 'react-c3js';
 
 class TempChart extends Component {
-
     render() {
         const d = {
-            x: "time",
+            x: 'time',
             columns: [
-                ['Temperature', ...this.props.data.map(entry => {
-                    return entry.temp
-                })],
-                ['time', ...this.props.data.map((entry) => {
-                    return entry.time
-                })]
-        ]};
+                [
+                    'Temperature',
+                    ...this.props.data.map(entry => {
+                        return entry.temp;
+                    }),
+                ],
+                [
+                    'time',
+                    ...this.props.data.map(entry => {
+                        return entry.time;
+                    }),
+                ],
+            ],
+        };
         return (
             <div>
                 <C3Chart
@@ -24,7 +30,7 @@ class TempChart extends Component {
                             tick: {
                                 format: '%b %d, %-I:%M %p',
                                 culling: {
-                                    max: 2
+                                    max: 2,
                                 },
                             },
                         },
@@ -33,10 +39,9 @@ class TempChart extends Component {
                         },
                     }}
                     data={d}
-                    
                 />
             </div>
-        )
+        );
     }
 }
 

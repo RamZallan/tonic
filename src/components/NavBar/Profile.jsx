@@ -1,5 +1,10 @@
 import React from 'react';
-import {DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from 'reactstrap';
+import {
+    DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
+    UncontrolledDropdown,
+} from 'reactstrap';
 
 class Profile extends React.Component {
     constructor(props) {
@@ -26,21 +31,23 @@ class Profile extends React.Component {
             <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret className="navbar-user">
                     <img
-                      className="rounded-circle"
-                      src={`https://profiles.csh.rit.edu/image/${username}`}
-                      alt=""
-                      aria-hidden={true}
-                      width={32}
-                      height={32}
+                        className="rounded-circle"
+                        src={`https://profiles.csh.rit.edu/image/${username}`}
+                        alt=""
+                        aria-hidden={true}
+                        width={32}
+                        height={32}
                     />
-                    {name} {drink_balance ? '(' + drink_balance + ' credits)' : ''}
-                    <span className="caret"/>
+                    {name} {drink_balance ? `(${drink_balance} credits)` : ''}
+                    <span className="caret" />
                 </DropdownToggle>
                 <DropdownMenu>
-                    <DropdownItem href={"https://profiles.csh.rit.edu/user/" + username}>
+                    <DropdownItem
+                        href={'https://profiles.csh.rit.edu/user/' + username}
+                    >
                         Profile
                     </DropdownItem>
-                    <DropdownItem divider/>
+                    <DropdownItem divider />
                     <DropdownItem href="https://github.com/ramzallan/tonic/">
                         View on Github
                     </DropdownItem>

@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
-import {Col} from "reactstrap";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { Col } from 'reactstrap';
+import { connect } from 'react-redux';
 
-import Toast from "./Toast";
+import Toast from './Toast';
 
 class Toasts extends Component {
     render() {
-        const toasts = []
+        const toasts = [];
         for (const machine of Object.keys(this.props.drops)) {
             for (const slot of this.props.drops[machine].slots) {
                 if (!slot.dropStatus) continue;
@@ -19,7 +19,11 @@ class Toasts extends Component {
                 );
             }
         }
-        return <Col xs="12" id="toasts">{toasts}</Col>;
+        return (
+            <Col xs="12" id="toasts">
+                {toasts}
+            </Col>
+        );
     }
 }
 
@@ -27,6 +31,4 @@ const mapStateToProps = state => ({
     drops: state.apis.drops,
 });
 
-export default connect(
-    mapStateToProps
-)(Toasts);
+export default connect(mapStateToProps)(Toasts);

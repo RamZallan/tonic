@@ -1,18 +1,27 @@
 import React from 'react';
-import { connect } from "react-redux";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert, FormGroup, Input, Label } from 'reactstrap';
+import { connect } from 'react-redux';
+import {
+    Button,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    Alert,
+    FormGroup,
+    Input,
+    Label,
+} from 'reactstrap';
 
 import { updateItem, fetchItems } from '../../actions';
-
 
 class UpdateItemModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          modal: this.props.modal,
-          newName: this.props.item.name,
-          newPrice: this.props.item.price,
-          alertObj: null,
+            modal: this.props.modal,
+            newName: this.props.item.name,
+            newPrice: this.props.item.price,
+            alertObj: null,
         };
 
         this.update = this.update.bind(this);
@@ -32,20 +41,25 @@ class UpdateItemModal extends React.Component {
     }
 
     update() {
-        this.props.doUpdateItem(this.props.oidc.user.access_token, this.props.item.id, this.state.newName, this.state.newPrice);
+        this.props.doUpdateItem(
+            this.props.oidc.user.access_token,
+            this.props.item.id,
+            this.state.newName,
+            this.state.newPrice
+        );
     }
 
     componentWillReceiveProps(nextProps) {
-      this.setState({
-          modal: nextProps.modal,
-      });
+        this.setState({
+            modal: nextProps.modal,
+        });
     }
 
     handleNameChange(e) {
         this.clearAlert();
         if (!e.target.value || !e.target.value.length) {
             this.setState({
-                newName: null
+                newName: null,
             });
         } else {
             this.setState({
@@ -59,28 +73,30 @@ class UpdateItemModal extends React.Component {
         let intVal = parseInt(e.target.value, 10);
         if (intVal && !isNaN(intVal)) {
             this.setState({
-                newPrice: intVal
+                newPrice: intVal,
             });
         } else {
             this.setState({
-                newPrice: null
+                newPrice: null,
             });
         }
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.updateItemError !== this.props.updateItemError ||
-                prevProps.updateItem !== this.props.updateItem) {
+        if (
+            prevProps.updateItemError !== this.props.updateItemError ||
+            prevProps.updateItem !== this.props.updateItem
+        ) {
             if (this.props.updateItemError) {
                 this.handleAlert({
                     type: 'error',
                     message: this.props.updateItemError,
-                })
+                });
             } else if (this.props.updateItem.message) {
                 this.handleAlert({
                     type: 'success',
                     message: this.props.updateItem.message,
-                })
+                });
             }
         }
     }
@@ -94,48 +110,81 @@ class UpdateItemModal extends React.Component {
     render() {
         let alertContent = '';
         if (this.state.alertObj) {
-            switch(this.state.alertObj.type) {
+            switch (this.state.alertObj.type) {
                 case 'error':
-                    alertContent = (<Alert color="danger"><b>Error: </b>{this.state.alertObj.message}</Alert>);
+                    alertContent = (
+                        <Alert color="danger">
+                            <b>Error: </b>
+                            {this.state.alertObj.message}
+                        </Alert>
+                    );
                     break;
                 case 'success':
                 default:
-                    alertContent = (<Alert color="success"><b>Success: </b>{this.state.alertObj.message}</Alert>);
+                    alertContent = (
+                        <Alert color="success">
+                            <b>Success: </b>
+                            {this.state.alertObj.message}
+                        </Alert>
+                    );
                     break;
             }
         }
         return (
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                <ModalHeader toggle={this.toggle}>Editing "<b>{this.props.item.name}</b>"</ModalHeader>
-                    <ModalBody>
-                        { alertContent }
-                        <FormGroup>
-                            <Label for={'name' + this.props.item.name.replace(/\s+/g, '')}>Name</Label>
-                            <Input
-                                id={'name' + this.props.item.name.replace(/\s+/g, '')}
-                                value={this.state.newName}
-                                onChange={e => this.handleNameChange(e)}
-                                placeholder={'Item name'}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for={'price' + this.props.item.name.replace(/\s+/g, '')}>Price</Label>
-                            <Input
-                                id={'price' + this.props.item.name.replace(/\s+/g, '')}
-                                value={this.state.newPrice}
-                                onChange={e => this.handlePriceChange(e)}
-                                placeholder={'Item price'}
-                            />
-                        </FormGroup>
-                        </ModalBody>
+                <ModalHeader toggle={this.toggle}>
+                    Editing "<b>{this.props.item.name}</b>"
+                </ModalHeader>
+                <ModalBody>
+                    {alertContent}
+                    <FormGroup>
+                        <Label
+                            for={
+                                'name' +
+                                this.props.item.name.replace(/\s+/g, '')
+                            }
+                        >
+                            Name
+                        </Label>
+                        <Input
+                            id={
+                                'name' +
+                                this.props.item.name.replace(/\s+/g, '')
+                            }
+                            value={this.state.newName}
+                            onChange={e => this.handleNameChange(e)}
+                            placeholder={'Item name'}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label
+                            for={
+                                'price' +
+                                this.props.item.name.replace(/\s+/g, '')
+                            }
+                        >
+                            Price
+                        </Label>
+                        <Input
+                            id={
+                                'price' +
+                                this.props.item.name.replace(/\s+/g, '')
+                            }
+                            value={this.state.newPrice}
+                            onChange={e => this.handlePriceChange(e)}
+                            placeholder={'Item price'}
+                        />
+                    </FormGroup>
+                </ModalBody>
                 <ModalFooter>
-                    <Button color="success" onClick={this.update}>Confirm</Button>
+                    <Button color="success" onClick={this.update}>
+                        Confirm
+                    </Button>
                 </ModalFooter>
             </Modal>
         );
     }
 }
-
 
 const mapStateToProps = state => ({
     oidc: state.oidc,
@@ -144,7 +193,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    doUpdateItem: (access_token, id, name, price) => updateItem(dispatch, access_token, id, name, price),
+    doUpdateItem: (access_token, id, name, price) =>
+        updateItem(dispatch, access_token, id, name, price),
     getItems: access_token => fetchItems(dispatch, access_token),
 });
 

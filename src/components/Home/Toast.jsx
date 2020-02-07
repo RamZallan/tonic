@@ -1,10 +1,9 @@
-import React, {Component} from 'react';
-import {Toast as BootstrapToast, ToastHeader, ToastBody} from "reactstrap";
+import React, { Component } from 'react';
+import { Toast as BootstrapToast, ToastHeader, ToastBody } from 'reactstrap';
 
-import InfoSpinner from "../InfoSpinner";
+import InfoSpinner from '../InfoSpinner';
 
 class Toast extends Component {
-
     constructor(props) {
         super(props);
 
@@ -14,7 +13,7 @@ class Toast extends Component {
 
         this.hide = this.hide.bind(this);
     }
-    
+
     componentDidUpdate(prevProps) {
         if (this.props.dropResult && this.props.dropResult.isLoading) {
             // make sure new toast cycles are shown when new request is sent
@@ -37,9 +36,7 @@ class Toast extends Component {
                     <ToastHeader icon={<InfoSpinner />} toggle={this.hide}>
                         {this.props.machineName} - {this.props.slot.item.name}
                     </ToastHeader>
-                    <ToastBody>
-                        Dropping {this.props.slot.item.name}
-                    </ToastBody>
+                    <ToastBody>Dropping {this.props.slot.item.name}</ToastBody>
                 </BootstrapToast>
             );
         } else if (this.props.slot.dropStatus.error) {
@@ -51,9 +48,7 @@ class Toast extends Component {
                     <ToastHeader icon="danger" toggle={this.hide}>
                         {this.props.machineName} - {this.props.slot.item.name}
                     </ToastHeader>
-                    <ToastBody>
-                        {this.props.slot.dropStatus.error}
-                    </ToastBody>
+                    <ToastBody>{this.props.slot.dropStatus.error}</ToastBody>
                 </BootstrapToast>
             );
         } else if (this.props.slot.dropStatus.message) {
@@ -65,14 +60,11 @@ class Toast extends Component {
                     <ToastHeader icon="success" toggle={this.hide}>
                         {this.props.machineName} - {this.props.slot.item.name}
                     </ToastHeader>
-                    <ToastBody>
-                        {this.props.slot.dropStatus.message}
-                    </ToastBody>
+                    <ToastBody>{this.props.slot.dropStatus.message}</ToastBody>
                 </BootstrapToast>
             );
         }
     }
 }
-
 
 export default Toast;

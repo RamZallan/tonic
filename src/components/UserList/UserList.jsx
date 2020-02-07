@@ -1,18 +1,17 @@
-import { connect } from "react-redux";
-import React, {Component} from 'react';
-import {Form, FormGroup, Input, Table, Alert} from "reactstrap";
+import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import { Form, FormGroup, Input, Table, Alert } from 'reactstrap';
 
 import User from './User';
 import { fetchUsers, fetchCredits } from '../../actions';
-import InfoSpinner from "../InfoSpinner";
-
+import InfoSpinner from '../InfoSpinner';
 
 class UserList extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            filterStr: "",
+            filterStr: '',
             alertObj: null,
         };
 
@@ -27,20 +26,25 @@ class UserList extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.creditsUpdateError !== this.props.creditsUpdateError ||
-                prevProps.creditsUpdate !== this.props.creditsUpdate) {
+        if (
+            prevProps.creditsUpdateError !== this.props.creditsUpdateError ||
+            prevProps.creditsUpdate !== this.props.creditsUpdate
+        ) {
             if (this.props.creditsUpdateError) {
                 this.handleAlert({
                     type: 'error',
                     message: this.props.creditsUpdateError,
-                })
+                });
             } else if (this.props.creditsUpdate.message) {
                 this.handleAlert({
                     type: 'success',
                     message: this.props.creditsUpdate.message,
-                })
+                });
                 this.props.getUsers(this.props.oidc.user.access_token);
-                this.props.getCredits(this.props.oidc.user.access_token, this.props.oidc.user.profile.preferred_username);
+                this.props.getCredits(
+                    this.props.oidc.user.access_token,
+                    this.props.oidc.user.profile.preferred_username
+                );
             }
         }
     }
@@ -59,28 +63,40 @@ class UserList extends Component {
 
     render() {
         if (!this.props.users) {
-            return (<InfoSpinner>Loading users</InfoSpinner>);
+            return <InfoSpinner>Loading users</InfoSpinner>;
         } else if (!this.props.users.length) {
-            return (<h2>No users found</h2>);
+            return <h2>No users found</h2>;
         }
         let alertContent = '';
         if (this.state.alertObj) {
-            switch(this.state.alertObj.type) {
+            switch (this.state.alertObj.type) {
                 case 'error':
-                    alertContent = (<Alert color="danger"><b>Error: </b>{this.state.alertObj.message}</Alert>);
+                    alertContent = (
+                        <Alert color="danger">
+                            <b>Error: </b>
+                            {this.state.alertObj.message}
+                        </Alert>
+                    );
                     break;
                 case 'success':
                 default:
-                    alertContent = (<Alert color="success"><b>Success: </b>{this.state.alertObj.message}</Alert>);
+                    alertContent = (
+                        <Alert color="success">
+                            <b>Success: </b>
+                            {this.state.alertObj.message}
+                        </Alert>
+                    );
                     break;
             }
         }
         const filterLen = this.state.filterStr.length;
         const users = this.props.users
-            .filter(user => (filterLen > 0
-                ? (this.state.filterStr === user.uid.substring(0, filterLen)
-                    || this.state.filterStr === user.cn.substring(0, filterLen))
-                : false)
+            .filter(user =>
+                filterLen > 0
+                    ? this.state.filterStr ===
+                          user.uid.substring(0, filterLen) ||
+                      this.state.filterStr === user.cn.substring(0, filterLen)
+                    : false
             )
             .sort((a, b) => a.uid > b.uid)
             .map((user, index) => {
@@ -99,10 +115,16 @@ class UserList extends Component {
                 {alertContent}
                 <Form>
                     <FormGroup>
-                        <Input onChange={e => this.setState({filterStr: e.target.value })} type="search" placeholder="Search"/>
+                        <Input
+                            onChange={e =>
+                                this.setState({ filterStr: e.target.value })
+                            }
+                            type="search"
+                            placeholder="Search"
+                        />
                     </FormGroup>
                 </Form>
-                {users.length ?
+                {users.length ? (
                     <Table hover responsive>
                         <thead>
                             <tr>
@@ -111,20 +133,17 @@ class UserList extends Component {
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {users}
-                        </tbody>
+                        <tbody>{users}</tbody>
                     </Table>
-                :
-                    (<div>
-                        {this.state.filterStr.length ?
-                            `No results matching "${this.state.filterStr}".`
-                        :   "Enter a search query to find users."
-                        }
-                    </div>)
-                }
+                ) : (
+                    <div>
+                        {this.state.filterStr.length
+                            ? `No results matching "${this.state.filterStr}".`
+                            : 'Enter a search query to find users.'}
+                    </div>
+                )}
             </div>
-        )
+        );
     }
 }
 
@@ -137,9 +156,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     getUsers: access_token => fetchUsers(dispatch, access_token),
-    getCredits: (access_token, uid) => fetchCredits(dispatch, access_token, uid),
+    getCredits: (access_token, uid) =>
+        fetchCredits(dispatch, access_token, uid),
 });
-
 
 export default connect(
     mapStateToProps,

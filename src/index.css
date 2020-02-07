@@ -29,7 +29,7 @@ body {
 }
 
 .drink-item {
-    padding: .75rem 0.5rem;
+    padding: 0.75rem 0.5rem;
 }
 
 .drink-item:not(.disabled):hover {
@@ -46,7 +46,6 @@ body {
     margin: 15px 0;
 }
 
-
 .card {
     margin-bottom: 20px;
 }
@@ -59,7 +58,8 @@ body {
     cursor: not-allowed;
 }
 
-.list-group-item.disabled, .list-group-item:disabled {
+.list-group-item.disabled,
+.list-group-item:disabled {
     pointer-events: auto;
 }
 
@@ -75,7 +75,6 @@ body {
 .input-group input.form-control {
     height: auto;
     font-size: 0.815rem;
-
 }
 
 .input-group button {
