@@ -37,7 +37,10 @@ class Slot extends Component {
     }
 
     render() {
-        const disabled = this.props.slot.empty || !this.props.slot.active;
+        const disabled =
+            this.props.slot.empty || // empty via sensors
+            !this.props.slot.active || // manually set inactive
+            (this.props.slot.count !== null && this.props.slot.count < 1); // empty via DB count
         return (
             <ListGroupItem className="drink-item" disabled={disabled}>
                 <span className="text">{this.props.slot.item.name}</span>
@@ -51,9 +54,7 @@ class Slot extends Component {
                             className="drop"
                             onClick={this.drop}
                             disabled={
-                                disabled ||
-                                this.props.drink_balance <
-                                    this.props.slot.item.price
+                                disabled || this.props.drink_balance < this.props.slot.item.price
                             }
                             color="primary"
                         >
@@ -86,8 +87,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    dropDrink: (access_token, machine, slot) =>
-        dropDrink(dispatch, access_token, machine, slot),
+    dropDrink: (access_token, machine, slot) => dropDrink(dispatch, access_token, machine, slot),
 });
 
 export default connect(

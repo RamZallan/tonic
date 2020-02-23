@@ -42,13 +42,13 @@ function apis(
     },
     action
 ) {
+    let drops = {};
     switch (action.type) {
         case REQUEST_STOCK:
             return Object.assign({}, state, {
                 isFetching: true,
             });
         case RECEIVE_STOCK:
-            let drops = {};
             for (const machine of action.stock.machines) {
                 drops[machine.name] = {
                     display_name: machine.display_name,

@@ -266,7 +266,8 @@ export function dropDrink(dispatch, access_token, machine, slot) {
     };
     return POST(access_token, '/drinks/drop', body)
         .then(response => response.json())
-        .then(json => dispatch(responseDropDrink(json, machine, slot)));
+        .then(json => dispatch(responseDropDrink(json, machine, slot)))
+        .then(() => fetchStock(dispatch, access_token));
 }
 
 export function updateUserCredits(dispatch, access_token, uid, drinkBalance) {
@@ -317,13 +318,14 @@ export function addItem(dispatch, access_token, name, price) {
         .then(json => dispatch(responseAddItem(json)));
 }
 
-export function changeSlotActive(dispatch, access_token, machine, slot, active, item_id) {
+export function changeSlotActive(dispatch, access_token, machine, slot, active, item_id, count) {
     dispatch(requestChangeSlotActive());
     const body = {
         active,
         item_id,
         machine,
         slot,
+        count,
     };
     return PUT(access_token, '/slots', body)
         .then(response => response.json())

@@ -21,6 +21,7 @@ class EditSlotModal extends React.Component {
             modal: this.props.modal,
             newDrink: this.props.drink.item.id,
             newActive: this.props.drink.active,
+            newCount: this.props.drink.count,
             alertObj: null,
         };
 
@@ -52,13 +53,20 @@ class EditSlotModal extends React.Component {
         }));
     }
 
+    handleCountChange(e) {
+        this.setState({
+            newCount: e.target.value,
+        });
+    }
+
     changeActive() {
         this.props.doChangeSlotActive(
             this.props.oidc.user.access_token,
             this.props.machine.name,
             this.props.slot,
             this.state.newActive,
-            this.state.newDrink
+            this.state.newDrink,
+            this.state.newCount
         );
     }
 
@@ -70,8 +78,7 @@ class EditSlotModal extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (
-            prevProps.changeSlotActiveError !==
-                this.props.changeSlotActiveError ||
+            prevProps.changeSlotActiveError !== this.props.changeSlotActiveError ||
             prevProps.changeSlotActive !== this.props.changeSlotActive
         ) {
             if (this.props.changeSlotActiveError) {
@@ -126,9 +133,7 @@ class EditSlotModal extends React.Component {
         let itemOptions;
         if (this.props.items) {
             itemOptions = this.props.items
-                .sort((a, b) =>
-                    a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
-                )
+                .sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1))
                 .map(item => (
                     <option value={item.id} key={item.id}>
                         {item.name}
@@ -156,6 +161,18 @@ class EditSlotModal extends React.Component {
                             {itemOptions || <option disabled>No items</option>}
                         </Input>
                     </FormGroup>
+                    {this.props.machine.name === 'snack' && (
+                        <FormGroup>
+                            <Label>Count</Label>
+                            <Input
+                                value={this.state.newCount}
+                                min={0}
+                                max={20}
+                                onChange={e => this.handleCountChange(e)}
+                                type="number"
+                            />{' '}
+                        </FormGroup>
+                    )}
                     <FormGroup check>
                         <Label check>
                             <Input
@@ -185,15 +202,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    doChangeSlotActive: (access_token, machine, number, active, item_id) =>
-        changeSlotActive(
-            dispatch,
-            access_token,
-            machine,
-            number,
-            active,
-            item_id
-        ),
+    doChangeSlotActive: (access_token, machine, number, active, item_id, count) =>
+        changeSlotActive(dispatch, access_token, machine, number, active, item_id, count),
     getItems: access_token => fetchItems(dispatch, access_token),
     getStock: access_token => fetchStock(dispatch, access_token),
 });
